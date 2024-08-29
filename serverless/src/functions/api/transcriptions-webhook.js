@@ -4,7 +4,7 @@ const SyncOperations = require(Runtime.getFunctions()[
 exports.handler = async function handler(context, event, callback) {
   try {
     const response = new Twilio.Response();
-
+    const assistantSid = context.TWILIO_AI_ASSISTANT_SID;
     response.appendHeader("Access-Control-Allow-Origin", "*");
     response.appendHeader("Access-Control-Allow-Methods", "OPTIONS POST GET");
     response.appendHeader("Content-Type", "application/json");
