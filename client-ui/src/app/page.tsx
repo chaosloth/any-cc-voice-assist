@@ -2,7 +2,10 @@
 
 import VoiceAssistTabStub from '@/components/VoiceAssistTabStub';
 import CallList from '@/components/CallList';
-import { Box, Card } from '@twilio-paste/core';
+import { Box } from '@twilio-paste/core/box';
+import { Heading } from '@twilio-paste/core/heading';
+import { Flex } from '@twilio-paste/core/flex';
+import { Text } from '@twilio-paste/core/text';
 import React from 'react';
 import { useEffect } from 'react';
 
@@ -24,7 +27,7 @@ export default function Home() {
     }
 
     console.log(`Using SID [${sid}]`);
-  }, []);
+  }, [sid]);
 
   if (sid)
     return (
@@ -38,6 +41,15 @@ export default function Home() {
         backgroundPosition="center" // This centers the background image
         overflow={'scroll'}
       >
+        <Flex hAlignContent={'center'} paddingTop={'space50'}>
+          <Heading as={'div'} variant={'heading10'} marginBottom={'space0'}>
+            <Text as={'span'} color={'colorTextDecorative40'} fontSize={'fontSize70'}>
+              Koh
+            </Text>
+            Pilot
+          </Heading>
+        </Flex>
+
         <VoiceAssistTabStub callSid={sid} />
       </Box>
     );

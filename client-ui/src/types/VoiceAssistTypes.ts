@@ -40,7 +40,7 @@ export type TranscriptTurn = {
 
 export type AiAction = {
   title: string;
-  description: string;
+  description?: string;
   action_url: string;
   completed: boolean;
 };

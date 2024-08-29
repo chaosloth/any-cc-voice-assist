@@ -53,10 +53,10 @@ Replace the `your_endpoint` and `task_router_workflow_sid` as required.
 
 ### AI Suggestion
 ```json
-{"actor":"AI","type": "suggestion","suggestionFromAI":{"title":"Headline statement","suggestion":"This is a longer set of text"}}
+{"actor":"AI","type": "suggestion","ai":{"title":"Headline statement","suggestion":"This is a longer set of text"}}
 ```
 
 ### AI Action
 ```json
-{"actor":"AI","type": "action","actionFromAI":{"title":"This is an action","description":"This is the detail", "action_url":"https://www.twilio.com", "completed":false}}
+{"actor":"AI","type": "action","ai":{"title":"This is an action","description":"This is the detail", "action_url":"https://www.twilio.com", "completed":false}}
 ```
