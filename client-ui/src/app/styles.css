@@ -1,0 +1,23 @@
+html {
+    height: 100%;
+}
+
+body {
+    height: 100%;
+}
+
+.main-layout {
+    display: flex;
+    width: 100%;
+    padding: 30px var(--space-space-0, 0px);
+    flex-direction: column;
+    /* justify-content: flex-end; */
+    align-items: center;
+    gap: 50px;
+}
+
+.twilio-logo {
+    width: 132.228px;
+    height: 40px;
+    flex-shrink: 0;
+}
