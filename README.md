@@ -1,6 +1,8 @@
 # Twilio Realtime Voice Transscription for any Contact Centre
 This is a demonstration project to showcaset Twilio RTT using AI for process and knowledge guidance. You can swap in other LLMs as needed.
 
+![dashboard](./docs/demo.png)
+
 ## Setup
 To kick off RTT use the `<Transcription/>` noun, pointing to the API endpoint in this project
 
