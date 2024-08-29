@@ -4,7 +4,7 @@ const SyncOperations = require(Runtime.getFunctions()[
 exports.handler = async function handler(context, event, callback) {
   try {
     const response = new Twilio.Response();
-
+    const assistantSid = context.TWILIO_AI_ASSISTANT_SID;
     response.appendHeader("Access-Control-Allow-Origin", "*");
     response.appendHeader("Access-Control-Allow-Methods", "OPTIONS POST GET");
     response.appendHeader("Content-Type", "application/json");
@@ -38,7 +38,16 @@ exports.handler = async function handler(context, event, callback) {
         console.log("Sync Map Item create: ", SyncMapResult);
         break;
       case "transcription-content":
+        console.log(event)
+        const token = await signRequest(context, event);
+        const aiAssistantPayload = {
+          Body: event.Body,
+          SessionId: `TRANSCRIPTION_${event.CallSid}`,
+          Webhook: `https://${context.DOMAIN_NAME
+            }/api/ai-assistant-response?_token=${encodeURIComponent(token)}`,
+        };
         if (event.Track === "inbound_track") {
+
           const transcript = JSON.parse(event.TranscriptionData).transcript;
           console.log("transcription: user: ", transcript);
           const syncStreamInboundData = {
@@ -54,6 +63,9 @@ exports.handler = async function handler(context, event, callback) {
               syncServiceSid: context.SYNC_SERVICE_SID,
             });
           console.log(streamMessageInboundResult);
+
+          aiAssistantPayload = { ...aiAssistantPayload, Author: `inbound`, Body: transcript, Identity: `phone:${event.CallSid}` } //from parameter phone:<from>
+
         } else if (event.Track === "outbound_track") {
           console.log("transcription: agent: ", event.TranscriptionData);
           const transcript = JSON.parse(event.TranscriptionData).transcript;
@@ -70,6 +82,15 @@ exports.handler = async function handler(context, event, callback) {
               syncServiceSid: context.SYNC_SERVICE_SID,
             });
           console.log(streamMessageOutboundResult);
+
+          aiAssistantPayload = { ...aiAssistantPayload, Author: `outbound`, Body: transcript, Identity: `phone:${event.CallSid}` } //to parameter phone:<to>
+
+        }
+
+        try {
+          await sendMessageToAssistant(context, assistantSid, aiAssistantPayload);
+        } catch (err) {
+          console.error(err);
         }
         break;
       case "transcription-stopped":
