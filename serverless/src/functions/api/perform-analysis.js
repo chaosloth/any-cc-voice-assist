@@ -17,7 +17,7 @@ You must mark the task as complete if you can see it in the transcript.
 
 POSSIBLE ACTIONS:
 - Inform the customer of our refund policy, url: https://help.twilio.com/articles/360010066814
-- Check if the  refund is within policy, url: https://help.twilio.com/articles/360010066814
+- Check if the refund is within policy, url: https://help.twilio.com/articles/360010066814
 - View recent customer transactions, url: https://www.twilio.com/en-us/customer-data-platform
 - Check stock of replacement product(s), url: https://www.twilio.com/en-us/customer-data-platform
 - Escalate the customer request to manager, url: https://www.twilio.com/en-us/flex
@@ -72,11 +72,9 @@ Do NOT use markdown syntax
         const suggestionJson = result.choices[0].message.content?.trim();
         console.log(`JSON [${instructionType}] RESP >> `, suggestionJson);
         let suggestion = {};
-        let success = false;
         try {
           suggestion = JSON.parse(suggestionJson);
-          if (!suggestion.title || suggestion.title.trim() !== "") return;
-          success = true;
+          if (!suggestion.title || suggestion.title.trim() === "") return;
           const syncStreamAIData = {
             actor: "AI",
             type: instructionType,
@@ -89,13 +87,12 @@ Do NOT use markdown syntax
               data: syncStreamAIData,
               syncServiceSid: context.SYNC_SERVICE_SID,
             });
-          console.log(streamMessageAIResult);
+          console.log("Sync stream result", streamMessageAIResult);
         } catch (err) {
-          success = false;
-          console.log("Error parsing results from AI", err);
+          console.log("Error parsing results from AI - probably no action");
         }
-        console.log(suggestion);
-        response.setBody({ success, ...suggestion });
+        console.log("Suggestion", suggestion);
+        response.setBody({ ...suggestion });
       }
     };
 

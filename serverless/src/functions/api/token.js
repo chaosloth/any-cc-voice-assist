@@ -1,10 +1,4 @@
-
-
-export const handler = async (
-  context,
-  event,
-  callback
-) => {
+exports.handler = async (context, event, callback) => {
   console.log("event received - /api/token: ", event);
 
   // make sure you enable ACCOUNT_SID and AUTH_TOKEN in Functions/Configuration
@@ -12,7 +6,6 @@ export const handler = async (
   const SYNC_SERVICE_SID = context.SYNC_SERVICE_SID;
   const API_KEY = context.TWILIO_API_KEY;
   const API_SECRET = context.TWILIO_API_SECRET;
-
   let response = new Twilio.Response();
   response.appendHeader("Access-Control-Allow-Origin", "*");
   response.appendHeader("Access-Control-Allow-Methods", "GET,PUT,POST,DELETE");
@@ -21,14 +14,14 @@ export const handler = async (
     "Authorization,Content-Type,Accept"
   );
 
-  if (!event.identity || event.identity == "") {
-    console.log("Missing identity in request");
-    response.setStatusCode(400);
-    response.setBody({ status: "missing identity" });
-    return callback(null, response);
-  }
-
   try {
+    if (!event.identity || event.identity == "") {
+      console.log("Missing identity in request");
+      response.setStatusCode(400);
+      response.setBody({ status: "missing identity" });
+      return callback(null, response);
+    }
+
     const AccessToken = Twilio.jwt.AccessToken;
     const SyncGrant = AccessToken.SyncGrant;
 

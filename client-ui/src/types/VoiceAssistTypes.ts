@@ -11,20 +11,27 @@ export type AiTranscriptionMessage = AiMessage | TranscriptionMessage;
 
 export type AiMessage = AiSuggestionMessage | AiActionMessage;
 
+export enum Actor {
+  AI = 'AI',
+  inbound = 'inbound',
+  outbound = 'outbound',
+  assistant = 'assistant',
+}
+
 export type AiSuggestionMessage = {
-  actor: 'AI';
+  actor: Actor.AI;
   type: 'suggestion';
   ai: AiSuggestion;
 };
 
 export type AiActionMessage = {
-  actor: 'AI';
+  actor: Actor.AI;
   type: 'action';
   ai: AiAction;
 };
 
 export type TranscriptionMessage = {
-  actor: 'inbound' | 'outbound';
+  actor: Actor.inbound | Actor.outbound | Actor.assistant;
   transcriptionText: string;
 };
 

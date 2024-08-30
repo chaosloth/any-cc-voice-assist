@@ -1,8 +1,9 @@
-const SyncOperations = require(Runtime.getFunctions()['common/twilio-wrappers/sync'].path);
-const {
-  signRequest,
-  sendMessageToAssistant
-} = require(Runtime.getFunctions()["common/helpers/util"].path);
+const SyncOperations = require(Runtime.getFunctions()[
+  "common/twilio-wrappers/sync"
+].path);
+const { signRequest, sendMessageToAssistant } = require(Runtime.getFunctions()[
+  "common/helpers/util"
+].path);
 exports.handler = async function handler(context, event, callback) {
   try {
     const response = new Twilio.Response();
@@ -15,10 +16,7 @@ exports.handler = async function handler(context, event, callback) {
 
     switch (event.TranscriptionEvent) {
       case "transcription-started":
-        console.log(
-          "transcriptionEvent: transcription-started: ",
-          event.CallSid
-        );
+        console.log("transcriptionEvent: transcription-started: ", event);
 
         // Create Sync Stream
         const syncStreamResult = await SyncOperations.createStream({
@@ -46,7 +44,7 @@ exports.handler = async function handler(context, event, callback) {
           Body: event.Body,
           SessionId: `TRANSCRIPTION_${event.CallSid}`,
           Webhook: `https://${
-            context.DOMAIN_OVERRIDE || context.DOMAIN_NAME
+            context.DOMAIN_NAME
           }/api/ai-assistant-response?_token=${encodeURIComponent(token)}`,
         };
         if (event.Track === "inbound_track") {
