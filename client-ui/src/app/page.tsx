@@ -43,7 +43,7 @@ export default function Home() {
       >
         <Flex hAlignContent={'center'} paddingTop={'space50'}>
           <Heading as={'div'} variant={'heading10'} marginBottom={'space0'}>
-            <Text as={'span'} color={'colorTextDecorative40'} fontSize={'fontSize70'}>
+            <Text as={'span'} color={'colorTextDecorative40'} fontSize={'fontSize90'} fontWeight={'fontWeightLight'}>
               Koh
             </Text>
             Pilot

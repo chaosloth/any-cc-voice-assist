@@ -75,6 +75,7 @@ Do NOT use markdown syntax
         let success = false;
         try {
           suggestion = JSON.parse(suggestionJson);
+          if (!suggestion.title || suggestion.title.trim() !== "") return;
           success = true;
           const syncStreamAIData = {
             actor: "AI",
