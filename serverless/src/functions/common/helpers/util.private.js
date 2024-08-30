@@ -75,7 +75,7 @@ async function getAssistantSid(context, event) {
       console.log("Invalid attribute structure", err);
     }
   }
-  const assistantSid = event.AssistantSid || context.ASSISTANT_SID;
+  const assistantSid = event.AssistantSid || context.TWILIO_AI_ASSISTANT_SID;
 
   if (!assistantSid) {
     throw new Error("Missing Assistant SID configuration");
