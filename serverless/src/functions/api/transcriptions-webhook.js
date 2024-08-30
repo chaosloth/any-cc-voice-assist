@@ -1,6 +1,8 @@
-const SyncOperations = require(Runtime.getFunctions()[
-  "common/twilio-wrappers/sync"
-].path);
+const SyncOperations = require(Runtime.getFunctions()['common/twilio-wrappers/sync'].path);
+const {
+  signRequest,
+  sendMessageToAssistant
+} = require(Runtime.getFunctions()["common/helpers/util"].path);
 exports.handler = async function handler(context, event, callback) {
   try {
     const response = new Twilio.Response();
@@ -40,7 +42,7 @@ exports.handler = async function handler(context, event, callback) {
       case "transcription-content":
         console.log(event)
         const token = await signRequest(context, event);
-        const aiAssistantPayload = {
+        let aiAssistantPayload = {
           Body: event.Body,
           SessionId: `TRANSCRIPTION_${event.CallSid}`,
           Webhook: `https://${context.DOMAIN_NAME
