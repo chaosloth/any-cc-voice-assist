@@ -1,27 +1,9 @@
-// Imports global types
-import "@twilio-labs/serverless-runtime-types";
-// Fetches specific types
-import {
-  ServerlessCallback,
-  ServerlessFunctionSignature,
-} from "@twilio-labs/serverless-runtime-types/types";
 
-export type MyContext = {
-  TWILIO_ACCOUNT_SID: string;
-  ACCOUNT_SID: string;
-  TWILIO_API_KEY: string;
-  TWILIO_API_SECRET: string;
-  SYNC_SERVICE_SID: string;
-};
 
-export type MyEvent = {
-  identity: string;
-};
-
-export const handler: ServerlessFunctionSignature<MyContext, MyEvent> = async (
-  context: MyContext,
-  event: MyEvent,
-  callback: ServerlessCallback
+export const handler = async (
+  context,
+  event,
+  callback
 ) => {
   console.log("event received - /api/token: ", event);
 
