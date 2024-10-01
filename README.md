@@ -3,6 +3,12 @@ This is a demonstration project to showcaset Twilio RTT using AI for process and
 
 ![dashboard](./docs/demo.png)
 
+**_Features:_**
+
+- 🌟 Display virtual agent transcript between parties
+- 🌟 Support for localisation (English, Japanese)
+- 🌟 Native Paste UI for chat dialog (supports themes)
+
 ## Setup
 To kick off RTT use the `<Transcription/>` noun, pointing to the API endpoint in this project
 
@@ -59,4 +65,46 @@ Replace the `your_endpoint` and `task_router_workflow_sid` as required.
 ### AI Action
 ```json
 {"actor":"AI","type": "action","ai":{"title":"This is an action","description":"This is the detail", "action_url":"https://www.twilio.com", "completed":false}}
+```
+
+
+## Flex
+Note to add a new language see below **before** deploying
+1. In the `flex-plugin/.env` folder configure the `REACT_APP_TRANSCRIPT_SERVICE_API_BASE` with the base URL created above
+2. Deploy the Flex plugin with `twilio plugins flex deploy`
+
+
+## Flex Localisation
+
+### Customise a language
+This project uses simple i18n for language translation.  Language files are located in `flex-plugin/src/languages/<locale>/common.js` where `<locale>` is a browser returned language code.
+
+For example, the following is a translation to Japanese:
+```json
+  "transcript": {
+    "customer": "お客様",
+    "bot-name": "Dialogflow ボット",
+    "transcript-start": "音声文字起こしの開始",
+    "said-by-customer": "顧客が言った",
+    "said-by-bot": "ボットが言った",
+    "end-message": "DialogFlow ボットの終了"
+  }
+```
+
+### Add a language
+After adding a language file (see above), edit the `FlexDialogflowVoicePlugin.tsx`:
+1. Import the newly created language file
+2. Add the language to `langData`
+
+
+``` ts
+import translation_en_us from "./languages/en-US/common.json";
+import translation_ja_jp from "./languages/ja-JP/common.json";
+```
+
+```ts
+    const langData = {
+      "en-US": translation_en_us,
+      "ja-JP": translation_ja_jp,
+    };
 ```

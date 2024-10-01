@@ -36,7 +36,18 @@ exports.handler = async function handler(context, event, callback) {
           data: { syncStream: syncStreamResult.stream.sid },
         });
         console.log("Sync Map Item create: ", SyncMapResult);
+
+        // Create a Sync List for the transcript
+        const SyncListResult = await SyncOperations.createList({
+          context,
+          name: `TRANSCRIPTION_${event.CallSid}`,
+          syncServiceSid: context.SYNC_SERVICE_SID,
+          ttl: 3600,
+        });
+
+        console.log("Sync Map List create: ", SyncListResult);
         break;
+
       case "transcription-content":
         console.log(event);
         const token = await signRequest(context, event);
@@ -47,13 +58,32 @@ exports.handler = async function handler(context, event, callback) {
             context.DOMAIN_NAME
           }/api/ai-assistant-response?_token=${encodeURIComponent(token)}`,
         };
+
+        const TranscriptionData = JSON.parse(event.TranscriptionData);
+
+        const createListItemResult = await SyncOperations.createListItem({
+          context,
+          listSid: `TRANSCRIPTION_${event.CallSid}`,
+          key: event.CallSid,
+          syncServiceSid: context.SYNC_SERVICE_SID,
+          data: {
+            sequence: event.SequenceId,
+            timestamp: event.Timestamp,
+            actor: event.Track,
+            type: "transcript",
+            transcriptionText: TranscriptionData.transcript,
+            confidence: TranscriptionData.confidence,
+          },
+        });
+        console.log(createListItemResult);
+
+        // Different handling based on inbound or outbound
         if (event.Track === "inbound_track") {
-          const transcript = JSON.parse(event.TranscriptionData).transcript;
-          console.log("transcription: user: ", transcript);
+          console.log("transcription: user: ", TranscriptionData.transcript);
           const syncStreamInboundData = {
             actor: "inbound",
             type: "transcript",
-            transcriptionText: transcript,
+            transcriptionText: TranscriptionData.transcript,
           };
           const streamMessageInboundResult =
             await SyncOperations.createStreamMessage({
@@ -67,16 +97,15 @@ exports.handler = async function handler(context, event, callback) {
           aiAssistantPayload = {
             ...aiAssistantPayload,
             Author: `inbound`,
-            Body: transcript,
+            Body: TranscriptionData.transcript,
             Identity: `phone:${event.CallSid}`,
           }; //from parameter phone:<from>
         } else if (event.Track === "outbound_track") {
           console.log("transcription: agent: ", event.TranscriptionData);
-          const transcript = JSON.parse(event.TranscriptionData).transcript;
           const syncStreamOutboundData = {
             actor: "outbound",
             type: "transcript",
-            transcriptionText: transcript,
+            transcriptionText: TranscriptionData.transcript,
           };
           const streamMessageOutboundResult =
             await SyncOperations.createStreamMessage({
@@ -90,7 +119,7 @@ exports.handler = async function handler(context, event, callback) {
           aiAssistantPayload = {
             ...aiAssistantPayload,
             Author: `outbound`,
-            Body: transcript,
+            Body: TranscriptionData.transcript,
             Identity: `phone:${event.CallSid}`,
           }; //to parameter phone:<to>
         }

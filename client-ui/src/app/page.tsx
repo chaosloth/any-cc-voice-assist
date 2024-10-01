@@ -41,14 +41,14 @@ export default function Home() {
         backgroundPosition="center" // This centers the background image
         overflow={'scroll'}
       >
-        <Flex hAlignContent={'center'} paddingTop={'space50'}>
+        {/* <Flex hAlignContent={'center'} paddingTop={'space50'}>
           <Heading as={'div'} variant={'heading10'} marginBottom={'space0'}>
             <Text as={'span'} color={'colorTextDecorative40'} fontSize={'fontSize90'} fontWeight={'fontWeightLight'}>
               Koh
             </Text>
             Pilot
           </Heading>
-        </Flex>
+        </Flex> */}
 
         <VoiceAssistTabStub callSid={sid} />
       </Box>

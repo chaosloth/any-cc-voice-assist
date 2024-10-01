@@ -8,5 +8,7 @@
     "outDir": "dist",
     "skipLibCheck": true,
     "sourceMap": true
-  }
+  },
+  "include": ["src/**/*"],
+  "exclude": ["dist"]
 }

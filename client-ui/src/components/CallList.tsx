@@ -47,7 +47,7 @@ const CallList: React.FC<CallListProps> = (props: CallListProps) => {
     return (
       <Tr>
         <Td>
-          <Anchor href={'#'} onClick={() => window.open(`/?sid=${data.key}`, `_blank`)}>
+          <Anchor href={'#'} onClick={() => window.open(`/index.html?sid=${data.key}`, `_blank`)}>
             {data.key}
           </Anchor>
         </Td>
